@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <script src="https://unpkg.com/gojs@2.3.11/release/go.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <div id="allSampleContent" class="p-4 w-full">
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+        <script id="code" src="app.js"></script>
+        <div id="sample">
+            <div style="width: 100%; display: flex; justify-content: space-between">
+                <div id="myPaletteDiv"
+                    style="width: 205px; margin-right: 2px; background-color: whitesmoke; border: 1px solid black; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0); cursor: auto;">
+                    <canvas tabindex="0" width="103" height="618"
+                        style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 103px; height: 618px; cursor: auto;"></canvas>
+                    <div style="position: absolute; overflow: auto; width: 103px; height: 618px; z-index: 1;">
+                        <div style="position: absolute; width: 1px; height: 1px;"></div>
+                    </div>
+                </div>
+                <div id="myDiagramDiv"
+                    style="border: 1px solid black; width: 100%; height: 400px; position: relative; -webkit-tap-highlight-color: rgba(255, 255, 255, 0);">
+                    <canvas tabindex="0" width="1054" height="398"
+                        style="position: absolute; top: 0px; left: 0px; z-index: 2; user-select: none; touch-action: none; width: 1054px; height: 398px;"></canvas>
+                    <div style="position: absolute; overflow: auto; width: 1054px; height: 398px; z-index: 1;">
+                        <div style="position: absolute; width: 1px; height: 1px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button id="SaveButton" onclick="save()" disabled="">Save</button>
+                    <button onclick="load()">Load</button>
+                    Diagram Model saved in JSON format:
+                </div>
+                <!-- <textarea id="mySavedModel" style="width:100%;height:240px">{ "class": "go.GraphLinksModel",
+"nodeDataArray": [
+],
+"linkDataArray": [
+]}
+  </textarea> -->
+
+</body>
+
+</html>

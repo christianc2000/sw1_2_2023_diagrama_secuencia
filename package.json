@@ -1,0 +1,17 @@
+{
+  "name": "practice_2_gojs",
+  "version": "1.0.0",
+  "description": "diagrama de secuencia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "christianc2000",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "socket.io": "^4.7.2"
+  }
+}

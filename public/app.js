@@ -163,6 +163,23 @@ function init() {
         });
 
     //
+    myDiagram.addDiagramListener("TextEdited", function (e) {
+        console.log(e.diagram);
+        var editedGroup = e.diagram.selection.first(); // Obtiene el grupo que se editó
+        if (editedGroup) {
+            var editedData = editedGroup.data; // Obtiene los datos del grupo editado
+            console.log("editedData: ", editedData);
+            var newText = editedData.text; // Nuevo texto editado
+            var owner = editedData.key; // Clave del grupo que representa al propietario
+
+            // Emitir los datos editados a través del socket
+            socket.emit('editGroupText:diagram', { text: newText, owner: owner });
+        } else {
+            console.log("no entra al editext");
+        }
+    });
+
+
     // Agregar un manejador de eventos para el evento ExternalObjectsDropped
     myDiagram.addDiagramListener("ExternalObjectsDropped", function (e) {
         const addedParts = e.diagram.selection.iterator;
@@ -170,32 +187,32 @@ function init() {
             const part = addedParts.value;
             // Realiza acciones con el elemento agregado, como obtener sus propiedades
             const key = part.data.key; // Obtener la clave del elemento
-            console.log("key del emit.... ",key);
-            console.log("emitiendo.... ",part.data);
+            console.log("key del emit.... ", key);
+            console.log("emitiendo.... ", part.data);
             socket.emit('addnode:diagram', part.data);
-            //const text = part.data.text; // Obtener el texto del elemento, por ejemplo
-            // Realiza aquí las acciones que desees con el elemento agregado
+
         }
-        //console.log(addedParts);
     });
     //Para ver cuando un elemento del diagrama se mueve
-    myDiagram.addDiagramListener("SelectionMoved", function(e) {
+    myDiagram.addDiagramListener("SelectionMoved", function (e) {
         var selectedNodes = e.diagram.selection; // Obtén los nodos seleccionados
-      
+
         // Itera a través de los nodos seleccionados
-        selectedNodes.each(function(node) {
-          var data = node.data; // Obtén los datos del nodo
-      
-          // Actualiza los datos del modelo según sea necesario
-          // Por ejemplo, puedes actualizar la propiedad "loc" con la nueva ubicación del nodo
-          console.log("nodo moviendo.....", data);
-          data.loc = go.Point.stringify(node.location);
+        selectedNodes.each(function (node) {
+            var data = node.data;
+            console.log("nodo moviendo.....", data);
+            data.loc = go.Point.stringify(node.location);
+            socket.emit('movenode:diagram', data);
         });
-      
-        // Ahora, puedes notificar a través de Socket.io u otro medio que los nodos se han movido
-        // socket.emit('nodesMoved', selectedNodes.toArray());
-      });
-      
+    });
+    myDiagram.addDiagramListener("LinkDrawn", function (e) {
+        var link = e.subject; // Obtiene el enlace creado
+        // Puedes acceder a los datos del enlace utilizando link.data
+        console.log("Nuevo enlace creado:", link.data);
+        socket.emit('linknode:diagram', link.data);
+    });
+
+
 }
 
 function ensureLifelineHeights(e) {
@@ -377,8 +394,10 @@ class MessageDraggingTool extends go.DraggingTool {
         }
     }
 }
+
+
 function save() {
-    //document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
     console.log(myDiagram.model.toJson());
     socket.emit('save:diagram', JSON.parse(myDiagram.model.toJson()));
     myDiagram.isModified = false;
@@ -400,6 +419,27 @@ socket.on('addnode:diagram', function (data) {
     // Añade el nuevo nodo a tu modelo
     myModel.addNodeData(data);
 });
+
+socket.on('linknode:diagram', function (data) {
+    // Itera a través de los datos recibidos del socket
+    console.log("Recibiendo link node: ", data);
+
+    // Obtén una referencia al modelo de tu diagrama
+    var myModel = myDiagram.model;
+
+    // Añade el nuevo enlace a tu modelo
+    myModel.addLinkData(data);
+
+    // Realiza un layout para que el diagrama se ajuste al nuevo enlace
+    myDiagram.layoutDiagram(true);
+});
+socket.on('user_id', (data) => {
+    const userId = data.id;
+    const usuarioElement = document.getElementById('usuario');
+    usuarioElement.innerHTML = `Usuario ID: ${userId}`;
+});
+
+
 
 
 window.addEventListener('DOMContentLoaded', init);

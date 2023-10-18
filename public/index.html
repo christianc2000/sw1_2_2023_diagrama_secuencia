@@ -4,7 +4,7 @@
 <body>
     <script src="https://unpkg.com/gojs@2.3.11/release/go.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-
+    <h3 id="usuario"></h3>
     <div id="allSampleContent" class="p-4 w-full">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
         <script id="code" src="app.js"></script>
@@ -29,16 +29,16 @@
             </div>
             <div>
                 <div>
-                    <button id="SaveButton" onclick="save()" disabled="">Save</button>
-                    <button onclick="load()">Load</button>
-                    Diagram Model saved in JSON format:
+                    <button id="SaveButton" onclick="save()" disabled="">Guardar</button>
+                    <button onclick="load()">Cargar</button>
+                    <!-- Diagram Model saved in JSON format: -->
                 </div>
-                <!-- <textarea id="mySavedModel" style="width:100%;height:240px">{ "class": "go.GraphLinksModel",
+                <textarea id="mySavedModel" style="width:100%;height:240px">{ "class": "go.GraphLinksModel",
 "nodeDataArray": [
 ],
 "linkDataArray": [
 ]}
-  </textarea> -->
+  </textarea>
 
 </body>
 
